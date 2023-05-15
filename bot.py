@@ -21,11 +21,30 @@ async def on_message(message):
         return
 
     if message.content.startswith('!sheep'):
+        print(f'Got the message: {message.content}')
+
         # Forward the message content to your Flask app
-        flask_app_url = FLASKURL
+        flask_app_url = f'{FLASKURL}/discord/message'
         payload = {
-            'content': message.content
+            'content': message.content,
         }
         response = requests.post(flask_app_url, json=payload)
+        if response.status_code == 204:
+            await message.channel.send("Message has been processed successfully.")
+        else:
+            await message.channel.send("Error in processing message.")
+
+    if message.attachments:
+        # Forward the attachments to your Flask app
+        flask_app_url = f'{FLASKURL}/discord/files'
+        payload = {
+            'attachments': [{'url': attachment.url, 'filename': attachment.filename} for attachment in message.attachments]
+        }
+        response = requests.post(flask_app_url, json=payload)
+        if response.status_code == 204:
+            await message.channel.send("File(s) have been uploaded to Electric Sheep successfully.")
+        else:
+            await message.channel.send("Error in processing file(s).")
+
 
 client.run(TOKEN)
