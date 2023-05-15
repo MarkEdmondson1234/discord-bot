@@ -6,8 +6,10 @@ from dotenv import load_dotenv
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')  # Get your bot token from the .env file
 FLASKURL = os.getenv('FLASK_URL')
+intents = discord.Intents.default()
+intents.messages = True
 
-client = discord.Client()
+client = discord.Client(intents = intents)
 
 @client.event
 async def on_ready():
