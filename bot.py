@@ -46,14 +46,14 @@ async def on_message(message):
                         source_message = f"Source: {source.get('page_content')}\nMetadata: {source.get('metadata')}"
                         await message.channel.send(source_message)
                     # Edit the thinking message to show the reply
-                    await message.channel.edit(content=reply_content)
+                    await thinking_message.edit(content=reply_content)
                 else:
                     # Edit the thinking message to show an error
                     await thinking_message.edit(content="Error in processing message.")
 
     if message.attachments:
         # Send a thinking message
-        thinking_message = await message.channel.send("Uploading file(s)...")
+        thinking_message = await message.channel.send("Uploading file(s)...1Gb limit...")
 
         # Forward the attachments to your Flask app
         flask_app_url = f'{FLASKURL}/discord/files'
