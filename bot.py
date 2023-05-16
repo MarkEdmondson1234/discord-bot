@@ -28,7 +28,9 @@ async def on_message(message):
         # Send a thinking message
         thinking_message = await message.channel.send("Thinking...")
 
-        history = await message.channel.history(limit=6).flatten()
+        history = []
+        async for msg in message.channel.history(limit=6):
+            history.append(msg)
 
         # Reverse the messages to maintain the order of conversation
         chat_history = [{"name": "AI" if msg.author == client.user \
