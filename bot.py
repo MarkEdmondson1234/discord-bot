@@ -28,10 +28,19 @@ async def on_message(message):
         # Send a thinking message
         thinking_message = await message.channel.send("Thinking...")
 
+        history = await channel.history(limit=6).flatten()
+        history.pop(0)  # Remove the triggering message
+
+        # Reverse the messages to maintain the order of conversation
+        chat_history = [{"name": "AI" if msg.author == client.user \
+                            else "Human", "content": msg.content} \
+                            for msg in reversed(messages)]
+
         # Forward the message content to your Flask app
         flask_app_url = f'{FLASKURL}/discord/message'
         payload = {
             'content': message.content,
+            'chat_history': chat_history
         }
 
         async with aiohttp.ClientSession() as session:
