@@ -37,6 +37,8 @@ async def on_message(message):
                             else "Human", "content": msg.content} \
                             for msg in reversed(history[1:])]
 
+        print(f"Chat history: {chat_history}")
+
         # Forward the message content to your Flask app
         flask_app_url = f'{FLASKURL}/discord/message'
         payload = {
