@@ -28,7 +28,7 @@ async def on_message(message):
         # Send a thinking message
         thinking_message = await message.channel.send("Thinking...")
 
-        history = await channel.history(limit=6).flatten()
+        history = await message.channel.history(limit=6).flatten()
         history.pop(0)  # Remove the triggering message
 
         # Reverse the messages to maintain the order of conversation
