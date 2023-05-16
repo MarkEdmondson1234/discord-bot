@@ -28,14 +28,12 @@ async def on_message(message):
         # Send a thinking message
         thinking_message = await message.channel.send("Thinking...")
 
-        history = await message.channel.history(limit=6)
-        history.flatten()
-        history.pop(0)  # Remove the triggering message
+        history = await message.channel.history(limit=6).flatten()
 
         # Reverse the messages to maintain the order of conversation
         chat_history = [{"name": "AI" if msg.author == client.user \
                             else "Human", "content": msg.content} \
-                            for msg in reversed(messages)]
+                            for msg in reversed(history[1:])]
 
         # Forward the message content to your Flask app
         flask_app_url = f'{FLASKURL}/discord/message'
