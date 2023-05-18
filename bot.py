@@ -88,7 +88,7 @@ async def on_message(message):
                     print(f'response_data: {response_data}')
                     summaries = response_data.get('summaries', [])
                     for summary in summaries:
-                        await chunk_send(message.channel, source_message)
+                        await chunk_send(message.channel, summary)
                     await thinking_message.edit(content="Uploaded file and generated summaries")
                 else:
                     # Edit the thinking message to show an error
