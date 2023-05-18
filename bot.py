@@ -13,6 +13,11 @@ intents.dm_messages = True  # Enable DM messages
 
 client = discord.Client(intents=intents)
 
+async def chunk_send(channel, message):
+    chunks = [message[i:i+4000] for i in range(0, len(message), 4000)]
+    for chunk in chunks:
+        await channel.send(chunk)
+
 @client.event
 async def on_ready():
     print(f'{client.user} has connected to Discord!')
@@ -56,7 +61,7 @@ async def on_message(message):
                     reply_content = response_data.get('result')  # Get the 'result' field from the JSON
                     for source in source_docs:
                         source_message = f"Source: {source.get('page_content')}\nMetadata: {source.get('metadata')}"
-                        await message.channel.send(source_message)
+                        await chunk_send(message.channel, source_message)
                     # Edit the thinking message to show the reply
                     await thinking_message.edit(content=reply_content)
                 else:
@@ -83,8 +88,8 @@ async def on_message(message):
                     print(f'response_data: {response_data}')
                     summaries = response_data.get('summaries', [])
                     for summary in summaries:
-                        await message.channel.send(summary)
-                        await thinking_message.edit(content="Uploaded file and generated summaries")
+                        await chunk_send(message.channel, source_message)
+                    await thinking_message.edit(content="Uploaded file and generated summaries")
                 else:
                     # Edit the thinking message to show an error
                     await thinking_message.edit(content="Error in processing file(s).")
