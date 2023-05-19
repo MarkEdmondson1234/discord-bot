@@ -34,7 +34,7 @@ async def on_message(message):
         thinking_message = await message.channel.send("Thinking...")
 
         history = []
-        async for msg in message.channel.history(limit=6):
+        async for msg in message.channel.history(limit=10):
             history.append(msg)
 
         # Reverse the messages to maintain the order of conversation
@@ -45,7 +45,7 @@ async def on_message(message):
         print(f"Chat history: {chat_history}")
 
         # Forward the message content to your Flask app
-        flask_app_url = f'{FLASKURL}/discord/message'
+        flask_app_url = f'{FLASKURL}/discord/message/edmonbrain'
         payload = {
             'content': message.content,
             'chat_history': chat_history
