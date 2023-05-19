@@ -46,7 +46,7 @@ async def on_message(message):
 
         # Forward the message content to your Flask app
         flask_app_url = f'{FLASKURL}/discord/edmonbrain/message'
-        logging.info(f'Calling {flask_app_url}')
+        print(f'Calling {flask_app_url}')
         payload = {
             'content': message.content,
             'chat_history': chat_history
@@ -75,6 +75,7 @@ async def on_message(message):
 
         # Forward the attachments to your Flask app
         flask_app_url = f'{FLASKURL}/discord/edmonbrain/files'
+        print(f'Calling {flask_app_url}')
         payload = {
             'attachments': [{'url': attachment.url, 'filename': attachment.filename} for attachment in message.attachments]
         }
