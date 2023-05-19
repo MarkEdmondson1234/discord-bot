@@ -45,7 +45,7 @@ async def on_message(message):
         print(f"Chat history: {chat_history}")
 
         # Forward the message content to your Flask app
-        flask_app_url = f'{FLASKURL}/discord/edmonbrain/message/'
+        flask_app_url = f'{FLASKURL}/discord/edmonbrain/message'
         logging.info(f'Calling {flask_app_url}')
         payload = {
             'content': message.content,
