@@ -45,7 +45,7 @@ async def on_message(message):
         print(f"Chat history: {chat_history}")
 
         # Forward the message content to your Flask app
-        flask_app_url = f'{FLASKURL}/discord/message/edmonbrain'
+        flask_app_url = f'{FLASKURL}/discord/edmonbrain/message/'
         payload = {
             'content': message.content,
             'chat_history': chat_history
@@ -73,7 +73,7 @@ async def on_message(message):
         thinking_message = await message.channel.send("Uploading file(s)...1Gb limit...")
 
         # Forward the attachments to your Flask app
-        flask_app_url = f'{FLASKURL}/discord/files'
+        flask_app_url = f'{FLASKURL}/discord/edmonbrain/files'
         payload = {
             'attachments': [{'url': attachment.url, 'filename': attachment.filename} for attachment in message.attachments]
         }
