@@ -27,11 +27,17 @@ async def on_message(message):
     if message.author == client.user:
         return
 
+    if client.user not in message.mentions:
+        return
+
     if message.content:
         print(f'Got the message: {message.content}')
 
+        # Start a new thread with the received message
+        new_thread = await message.start_thread(name="Edmonbrain thread")
+
         # Send a thinking message
-        thinking_message = await message.channel.send("Thinking...")
+        thinking_message = await new_thread.send("Thinking...")
 
         history = []
         async for msg in message.channel.history(limit=10):
@@ -73,17 +79,20 @@ async def on_message(message):
 
                     for source in unique_source_docs:
                         source_message = f"*source metadata*: {source.get('metadata')}"
-                        await chunk_send(message.channel, source_message)
+                        await chunk_send(new_thread source_message)
 
                     # Edit the thinking message to show the reply
-                    await thinking_message.edit(content=reply_content)
+                    await new_thread.edit(content=reply_content)
                 else:
                     # Edit the thinking message to show an error
-                    await thinking_message.edit(content="Error in processing message.")
+                    await new_thread.edit(content="Error in processing message.")
 
     if message.attachments:
+        # Start a new thread with the received message
+        new_thread2 = await message.start_thread(name="Edmonbrain upload")
+
         # Send a thinking message
-        thinking_message = await message.channel.send("Uploading file(s)..")
+        thinking_message = await new_thread2.send("Uploading file(s)..")
 
         # Forward the attachments to Flask app
         flask_app_url = f'{FLASKURL}/discord/edmonbrain/files'
@@ -99,7 +108,7 @@ async def on_message(message):
                     print(f'response_data: {response_data}')
                     summaries = response_data.get('summaries', [])
                     for summary in summaries:
-                        await chunk_send(message.channel, summary)
+                        await chunk_send(new_thread2, summary)
                     await thinking_message.edit(content="Uploaded file(s)")
                 else:
                     # Edit the thinking message to show an error
