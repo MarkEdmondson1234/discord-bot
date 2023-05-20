@@ -37,10 +37,10 @@ async def on_message(message):
 
         # Check if the message was sent in a thread
         if isinstance(message.channel, discord.Thread):
-            thread = message.channel
+            new_thread = message.channel
         else:
             # If it's not a thread, create a new one
-            thread = await message.channel.create_thread(
+            new_thread = await message.channel.create_thread(
                 name=clean_content[:10], 
                 message=message)
 
