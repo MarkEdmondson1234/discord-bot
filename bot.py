@@ -14,7 +14,7 @@ intents.dm_messages = True  # Enable DM messages
 client = discord.Client(intents=intents)
 
 async def chunk_send(channel, message):
-    chunks = [message[i:i+1000] for i in range(0, len(message), 1000)]
+    chunks = [message[i:i+1500] for i in range(0, len(message), 1500)]
     for chunk in chunks:
         await channel.send(chunk)
 
