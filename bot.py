@@ -58,11 +58,23 @@ async def on_message(message):
                 if response.status == 200:
                     response_data = await response.json()  # Get the response data as JSON
                     print(f'response_data: {response_data}')
+
                     source_docs = response_data.get('source_documents', [])
                     reply_content = response_data.get('result')  # Get the 'result' field from the JSON
+
+                    seen = set()
+                    unique_source_docs = []
+
                     for source in source_docs:
+                        metadata_str = json.dumps(source.get('metadata'), sort_keys=True)
+                        if metadata_str not in seen:
+                            unique_source_docs.append(source)
+                            seen.add(metadata_str)
+
+                    for source in unique_source_docs:
                         source_message = f"*source metadata*: {source.get('metadata')}"
                         await chunk_send(message.channel, source_message)
+
                     # Edit the thinking message to show the reply
                     await thinking_message.edit(content=reply_content)
                 else:
@@ -73,7 +85,7 @@ async def on_message(message):
         # Send a thinking message
         thinking_message = await message.channel.send("Uploading file(s)..")
 
-        # Forward the attachments to your Flask app
+        # Forward the attachments to Flask app
         flask_app_url = f'{FLASKURL}/discord/edmonbrain/files'
         print(f'Calling {flask_app_url}')
         payload = {
@@ -82,9 +94,6 @@ async def on_message(message):
         async with aiohttp.ClientSession() as session:
             async with session.post(flask_app_url, json=payload) as response:
                 print(f'file response.status: {response.status}')
-                if response.status == 204:
-                    # Edit the thinking message to show the reply
-                    await thinking_message.edit(content='File successfully entered into brain.')
                 if response.status == 200:
                     response_data = await response.json()
                     print(f'response_data: {response_data}')
