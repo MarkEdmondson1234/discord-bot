@@ -79,7 +79,7 @@ async def on_message(message):
 
                     for source in unique_source_docs:
                         source_message = f"*source metadata*: {source.get('metadata')}"
-                        await chunk_send(new_thread source_message)
+                        await chunk_send(new_thread, source_message)
 
                     # Edit the thinking message to show the reply
                     await new_thread.edit(content=reply_content)
