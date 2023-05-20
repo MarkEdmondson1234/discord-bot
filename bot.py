@@ -32,7 +32,7 @@ async def on_message(message):
     if message.content:
         print(f'Got the message: {message.content}')
 
-        new_thread = await channel.create_thread(
+        new_thread = await message.channel.create_thread(
             name="Edmonbrain thread",
             message=message,
             type=ChannelType.public_thread)
