@@ -41,7 +41,7 @@ async def on_message(message):
         else:
             # If it's not a thread, create a new one
             new_thread = await message.channel.create_thread(
-                name=clean_content[:10], 
+                name=clean_content[:20], 
                 message=message)
 
 
@@ -92,6 +92,7 @@ async def on_message(message):
 
                     # Edit the thinking message to show the reply
                     await thinking_message.edit(content=reply_content)
+                    await new_thread.send(f"Reply to {bot_mention} within this thread to continue")
                 else:
                     # Edit the thinking message to show an error
                     await thinking_message.edit(content="Error in processing message.")
