@@ -27,14 +27,15 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-    if client.user not in message.mentions:
-        return
+    print(message)
 
     if message.content:
         print(f'Got the message: {message.content}')
 
-        # Start a new thread with the received message
-        new_thread = await message.start_thread(name="Edmonbrain thread")
+        new_thread = await channel.create_thread(
+            name="Edmonbrain thread",
+            message=message,
+            type=ChannelType.public_thread)
 
         # Send a thinking message
         thinking_message = await new_thread.send("Thinking...")
