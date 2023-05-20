@@ -61,7 +61,7 @@ async def on_message(message):
                     source_docs = response_data.get('source_documents', [])
                     reply_content = response_data.get('result')  # Get the 'result' field from the JSON
                     for source in source_docs:
-                        source_message = f"Source: {source.get('page_content')}\nMetadata: {source.get('metadata')}"
+                        source_message = f"*source metadata*: {source.get('metadata')}"
                         await chunk_send(message.channel, source_message)
                     # Edit the thinking message to show the reply
                     await thinking_message.edit(content=reply_content)
@@ -71,7 +71,7 @@ async def on_message(message):
 
     if message.attachments:
         # Send a thinking message
-        thinking_message = await message.channel.send("Uploading file(s)...1Gb limit...")
+        thinking_message = await message.channel.send("Uploading file(s)..")
 
         # Forward the attachments to your Flask app
         flask_app_url = f'{FLASKURL}/discord/edmonbrain/files'
@@ -91,7 +91,7 @@ async def on_message(message):
                     summaries = response_data.get('summaries', [])
                     for summary in summaries:
                         await chunk_send(message.channel, summary)
-                    await thinking_message.edit(content="Uploaded file and generated summaries")
+                    await thinking_message.edit(content="Uploaded file(s)")
                 else:
                     # Edit the thinking message to show an error
                     await thinking_message.edit(content="Error in processing file(s).")
