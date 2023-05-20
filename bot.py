@@ -34,8 +34,7 @@ async def on_message(message):
 
         new_thread = await message.channel.create_thread(
             name="Edmonbrain thread",
-            message=message,
-            type=ChannelType.public_thread)
+            message=message)
 
         # Send a thinking message
         thinking_message = await new_thread.send("Thinking...")
