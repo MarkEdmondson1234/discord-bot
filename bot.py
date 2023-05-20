@@ -98,19 +98,17 @@ async def on_message(message):
                     await thinking_message.edit(content="Error in processing message.")
 
     if message.attachments:
-        # Start a new thread with the received message
-        new_thread2 = await message.channel.create_thread(
-            name="File uploads",
-            message=message)
 
         # Send a thinking message
-        thinking_message = await new_thread2.send("Uploading file(s)..")
+        thinking_message2 = await new_thread.send("Uploading file(s)..")
 
         # Forward the attachments to Flask app
         flask_app_url = f'{FLASKURL}/discord/edmonbrain/files'
         print(f'Calling {flask_app_url}')
         payload = {
             'attachments': [{'url': attachment.url, 'filename': attachment.filename} for attachment in message.attachments]
+            'content': clean_content,
+            'chat_history': chat_history
         }
         async with aiohttp.ClientSession() as session:
             async with session.post(flask_app_url, json=payload) as response:
@@ -121,9 +119,9 @@ async def on_message(message):
                     summaries = response_data.get('summaries', [])
                     for summary in summaries:
                         await chunk_send(new_thread2, summary)
-                    await thinking_message.edit(content="Uploaded file(s)")
+                    await thinking_message2.edit(content="Uploaded file(s)")
                 else:
                     # Edit the thinking message to show an error
-                    await thinking_message.edit(content="Error in processing file(s).")
+                    await thinking_message2.edit(content="Error in processing file(s).")
 
 client.run(TOKEN)
