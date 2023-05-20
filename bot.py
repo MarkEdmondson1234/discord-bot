@@ -106,7 +106,7 @@ async def on_message(message):
         flask_app_url = f'{FLASKURL}/discord/edmonbrain/files'
         print(f'Calling {flask_app_url}')
         payload = {
-            'attachments': [{'url': attachment.url, 'filename': attachment.filename} for attachment in message.attachments]
+            'attachments': [{'url': attachment.url, 'filename': attachment.filename} for attachment in message.attachments],
             'content': clean_content,
             'chat_history': chat_history
         }
