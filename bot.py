@@ -40,7 +40,7 @@ async def on_message(message):
         thinking_message = await new_thread.send("Thinking...")
 
         history = []
-        async for msg in message.channel.history(limit=10):
+        async for msg in new_thread.history(limit=50):
             history.append(msg)
 
         # Reverse the messages to maintain the order of conversation
