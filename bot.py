@@ -82,14 +82,16 @@ async def on_message(message):
                         await chunk_send(new_thread, source_message)
 
                     # Edit the thinking message to show the reply
-                    await new_thread.edit(content=reply_content)
+                    await thinking_message.edit(content=reply_content)
                 else:
                     # Edit the thinking message to show an error
-                    await new_thread.edit(content="Error in processing message.")
+                    await thinking_message.edit(content="Error in processing message.")
 
     if message.attachments:
         # Start a new thread with the received message
-        new_thread2 = await message.start_thread(name="Edmonbrain upload")
+        new_thread2 = await message.channel.create_thread(
+            name="File uploads",
+            message=message)
 
         # Send a thinking message
         thinking_message = await new_thread2.send("Uploading file(s)..")
