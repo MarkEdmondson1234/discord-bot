@@ -52,8 +52,6 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-    print(message)
-
     if message.content:
         print(f'Got the message: {message.content}')
 
