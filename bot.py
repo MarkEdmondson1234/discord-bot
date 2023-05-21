@@ -106,7 +106,7 @@ async def on_message(message):
                     print(f'chat response.status: {response.status}')
                     if response.status == 200:
                         response_data = await response.json()  # Get the response data as JSON
-                        print(f'response_data: {response_data}')
+                        #print(f'response_data: {response_data}')
 
                         source_docs = response_data.get('source_documents', [])
                         reply_content = response_data.get('result')  # Get the 'result' field from the JSON
