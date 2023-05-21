@@ -24,7 +24,8 @@ def select_vectorname(message):
             print(f'Guild: {server_name} - vector_name: {vector_name}')
             return config[server_name]
 
-    raise ValueError(f"Could not find a configured vector for server_name: {server_name}")
+        raise ValueError(f"Could not find a configured vector for server_name: {server_name}")
+    return None
 
 
 
@@ -73,6 +74,11 @@ async def on_message(message):
         except ValueError as e:
             print(e)
             return  # exit the event handler
+
+        if VECTORNAME == None:
+            # maybe only let it answer to my user DMs
+            print(f'DM from {message.author}')
+            return
 
         # Send a thinking message
         thinking_message = await new_thread.send("Thinking...")
