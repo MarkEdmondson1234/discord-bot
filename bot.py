@@ -90,7 +90,7 @@ async def on_message(message):
                             else "Human", "content": msg.content} \
                             for msg in reversed(history[1:])]
 
-        print(f"Chat history: {chat_history}")
+        #print(f"Chat history: {chat_history}")
 
         if len(clean_content) > 10:
             # Forward the message content to your Flask app
