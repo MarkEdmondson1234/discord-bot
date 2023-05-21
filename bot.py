@@ -67,7 +67,7 @@ async def on_message(message):
             if len(clean_content) < 5:
                 thread_name = "Baaa--zzz"
             else:
-                thread_name = clean_content[:40]
+                thread_name = f"Baa-zzz - {clean_content[:40]}"
             # If it's not a thread, create a new one
             new_thread = await message.channel.create_thread(
                 name=thread_name, 
