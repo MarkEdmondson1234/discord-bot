@@ -120,10 +120,9 @@ async def on_message(message):
                         response_data = await response.json()  # Get the response data as JSON
                         #print(f'response_data: {response_data}')
 
+                        source_docs = response_data.get('source_documents', [])
+                        reply_content = response_data.get('result')  # Get the 'result' field from the JSON
                         if debug:
-                            source_docs = response_data.get('source_documents', [])
-                            reply_content = response_data.get('result')  # Get the 'result' field from the JSON
-
                             seen = set()
                             unique_source_docs = []
 
