@@ -57,6 +57,10 @@ async def on_message(message):
     if message.content:
         print(f'Got the message: {message.content}')
 
+        debug=False
+        if message.content.startswith("!debug"):
+            debug = True
+
         bot_mention = client.user.mention
         clean_content = message.content.replace(bot_mention, '')
 
@@ -118,22 +122,23 @@ async def on_message(message):
                         response_data = await response.json()  # Get the response data as JSON
                         #print(f'response_data: {response_data}')
 
-                        source_docs = response_data.get('source_documents', [])
-                        reply_content = response_data.get('result')  # Get the 'result' field from the JSON
+                        if debug:
+                            source_docs = response_data.get('source_documents', [])
+                            reply_content = response_data.get('result')  # Get the 'result' field from the JSON
 
-                        seen = set()
-                        unique_source_docs = []
+                            seen = set()
+                            unique_source_docs = []
 
-                        for source in source_docs:
-                            metadata_str = json.dumps(source.get('metadata'), sort_keys=True)
-                            if metadata_str not in seen:
-                                unique_source_docs.append(source)
-                                seen.add(metadata_str)
+                            for source in source_docs:
+                                metadata_str = json.dumps(source.get('metadata'), sort_keys=True)
+                                if metadata_str not in seen:
+                                    unique_source_docs.append(source)
+                                    seen.add(metadata_str)
 
-                        for source in unique_source_docs:
-                            metadata_source = source.get('metadata')
-                            source_message = f"**source**: {metadata_source.get('source')}"
-                            await chunk_send(new_thread, source_message)
+                            for source in unique_source_docs:
+                                metadata_source = source.get('metadata')
+                                source_message = f"**source**: {metadata_source.get('source')}"
+                                await chunk_send(new_thread, source_message)
 
                         # Edit the thinking message to show the reply
                         await thinking_message.edit(content=reply_content)
