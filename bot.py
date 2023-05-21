@@ -99,13 +99,13 @@ async def on_message(message):
                         await thinking_message.edit(content=reply_content)
 
                         # Check if the message was sent in a thread or a private message
-                        if isinstance(message.channel, discord.Thread):
+                        if isinstance(new_thread, discord.Thread):
                             await new_thread.send(f"Reply to {bot_mention} within this thread to continue. Use !savethread to save thread to database")
-                        elif isinstance(message.channel, discord.DMChannel):
+                        elif isinstance(new_thread, discord.DMChannel):
                             # Its a DM
                             await new_thread.send(f"Use !savethread to save private chat history to database")
                         else:
-                            print(f"I couldn't work out the channel type: {message.channel}")
+                            print(f"I couldn't work out the channel type: {new_thread}")
                     else:
                         # Edit the thinking message to show an error
                         await thinking_message.edit(content="Error in processing message.")
