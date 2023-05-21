@@ -132,7 +132,7 @@ async def on_message(message):
 
                         for source in unique_source_docs:
                             metadata_source = source.get('metadata')
-                            source_message = f"**source**: `{metadata_source.get('source')`}"
+                            source_message = f"**source**: {metadata_source.get('source')}"
                             await chunk_send(new_thread, source_message)
 
                         # Edit the thinking message to show the reply
@@ -143,7 +143,7 @@ async def on_message(message):
                             await new_thread.send(f"*Reply to {bot_mention} within this thread to continue. Use `!savethread` to save thread to database*")
                         elif isinstance(new_thread, discord.DMChannel):
                             # Its a DM
-                            await new_thread.send(f"*Use `!savethread` to save private chat history to database*")
+                            await new_thread.send(f"*Use !savethread to save private chat history to database*")
                         else:
                             print(f"I couldn't work out the channel type: {new_thread}")
                     else:
