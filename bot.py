@@ -52,6 +52,8 @@ async def on_message(message):
         async for msg in new_thread.history(limit=50):
             if msg.content.startswith(f"Reply to {bot_mention}"):
                 continue
+            if msg.content.startswith("Use !savethread"):
+                continue
             history.append(msg)
 
         # Reverse the messages to maintain the order of conversation
@@ -61,7 +63,7 @@ async def on_message(message):
 
         print(f"Chat history: {chat_history}")
 
-        if len(clean_content) > 5:
+        if len(clean_content) > 10:
             # Forward the message content to your Flask app
             flask_app_url = f'{FLASKURL}/discord/edmonbrain/message'
             print(f'Calling {flask_app_url}')
@@ -95,12 +97,21 @@ async def on_message(message):
 
                         # Edit the thinking message to show the reply
                         await thinking_message.edit(content=reply_content)
-                        await new_thread.send(f"Reply to {bot_mention} within this thread to continue. Use !savethread to save thread to database")
+
+                        # Check if the message was sent in a thread or a private message
+                        if isinstance(message.channel, discord.Thread):
+                            await new_thread.send(f"Reply to {bot_mention} within this thread to continue. Use !savethread to save thread to database")
+                        elif isinstance(message.channel, discord.DMChannel):
+                            # Its a DM
+                            await new_thread.send(f"Use !savethread to save private chat history to database")
+                        else:
+                            print(f"I couldn't work out the channel type: {message.channel}")
                     else:
                         # Edit the thinking message to show an error
                         await thinking_message.edit(content="Error in processing message.")
         else:
             print(f"Got a little message not worth sending: {clean_content}")
+            await thinking_message.edit(content="Your reply is too small to think too long about")
 
     if message.attachments:
 
