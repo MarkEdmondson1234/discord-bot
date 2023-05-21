@@ -155,6 +155,12 @@ async def on_message(message):
 
     if message.attachments:
 
+        max_file_size = 1 * 1024 * 1024  # 1 MB
+        for attachment in message.attachments:
+            if attachment.size > max_file_size:
+                await thinking_message.edit("Sorry, a file is too large. Please upload files smaller than 1MB each.")
+                return
+
         # Send a thinking message
         thinking_message2 = await new_thread.send("Uploading file(s)..")
 
