@@ -66,6 +66,8 @@ async def on_message(message):
             name=thread_name, 
             message=message)
 
+    clean_content = message.content
+
     if message.content:
         print(f'Got the message: {message.content}')
 
@@ -103,12 +105,14 @@ async def on_message(message):
         thinking_message = await new_thread.send("Thinking...")
 
         history = []
-        async for msg in new_thread.history(limit=50):
+        async for msg in new_thread.history(limit=30):
             if msg.content.startswith(f"*Reply to {bot_mention}"):
                 continue
             if msg.content.startswith("*Use !savethread"):
                 continue
-            if msg.content.startswith("*Use !saveurl"):
+            if msg.content.startswith("**source**:"):
+                continue
+            if msg.content.startswith("**url**:"):
                 continue
             history.append(msg)
 
