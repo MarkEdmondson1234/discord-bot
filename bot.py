@@ -88,7 +88,7 @@ async def on_message(message):
             if str(message.author) == "MarkeD#2972":
                 VECTORNAME="edmonbrain"
                 debug=True
-                words = shlex.split(str(message))
+                words = shlex.split(str(message.content))
                 print(words)
                 if words[0] == "!vectorname":
                     VECTORNAME = words[1]
