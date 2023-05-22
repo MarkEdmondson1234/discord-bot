@@ -64,7 +64,7 @@ async def on_message(message):
         clean_content = message.content.replace(bot_mention, '')
 
         # Check if the message was sent in a thread or a private message
-        if isinstance(message.channel, (discord.Thread, discord.DMChannel)):
+        if isinstance(message.channel, discord.Thread):
             new_thread = message.channel
         else:
             if len(clean_content) < 5:
@@ -87,14 +87,13 @@ async def on_message(message):
             print(f'DM from {message.author}')
             if message.author == "MarkeD#2972":
                 debug=True
-                await chunk_send(message.channel, "Hello Master. Use !vectorname <vector_name> 'clean content' to debug")
                 words = shlex.split(message)
                 if words[0] == "!vectorname":
                     VECTORNAME = words[1]
                     await chunk_send(message.channel, f"vectorname={VECTORNAME}")
                     clean_content = words[2]
                 else:
-                    await chunk_send(message.channel, "No changes made")
+                    await chunk_send(message.channel, "Hello Master. Use !vectorname <vector_name> 'clean content' to debug")
 
         # Send a thinking message
         thinking_message = await new_thread.send("Thinking...")
