@@ -64,7 +64,7 @@ async def on_message(message):
         clean_content = message.content.replace(bot_mention, '')
 
         # Check if the message was sent in a thread or a private message
-        if isinstance(message.channel, discord.Thread):
+        if isinstance(message.channel, (discord.Thread, discord.DMChannel)):
             new_thread = message.channel
         else:
             if len(clean_content) < 5:
