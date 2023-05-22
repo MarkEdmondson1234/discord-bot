@@ -44,15 +44,27 @@ async def chunk_send(channel, message):
     for chunk in chunks:
         await channel.send(chunk)
 
-@client.event
-async def on_ready():
-    print(f'{client.user} has connected to Discord!')
+def make_chat_history(new_thread):
+    history = []
+    async for msg in new_thread.history(limit=30):
+        if msg.content.startswith(f"*Reply to {bot_mention}"):
+            continue
+        if msg.content.startswith("*Use !savethread"):
+            continue
+        if msg.content.startswith("**source**:"):
+            continue
+        if msg.content.startswith("**url**:"):
+            continue
+        history.append(msg)
 
-@client.event
-async def on_message(message):
-    if message.author == client.user:
-        return
+    # Reverse the messages to maintain the order of conversation
+    chat_history = [{"name": "AI" if msg.author == client.user \
+                        else "Human", "content": msg.content} \
+                        for msg in reversed(history[1:])]
 
+    return chat_history
+
+async def make_new_thread(message):
     # Check if the message was sent in a thread or a private message
     if isinstance(message.channel, (discord.Thread, discord.DMChannel)):
         new_thread = message.channel
@@ -66,7 +78,22 @@ async def on_message(message):
             name=thread_name, 
             message=message)
 
+    return new_thread
+
+@client.event
+async def on_ready():
+    print(f'{client.user} has connected to Discord!')
+
+@client.event
+async def on_message(message):
+    if message.author == client.user:
+        return
+
+    new_thread = make_new_thread(message)
+
     clean_content = message.content
+
+    chat_history = make_chat_history(new_thread)
 
     if message.content:
         print(f'Got the message: {message.content}')
@@ -103,25 +130,6 @@ async def on_message(message):
 
         # Send a thinking message
         thinking_message = await new_thread.send("Thinking...")
-
-        history = []
-        async for msg in new_thread.history(limit=30):
-            if msg.content.startswith(f"*Reply to {bot_mention}"):
-                continue
-            if msg.content.startswith("*Use !savethread"):
-                continue
-            if msg.content.startswith("**source**:"):
-                continue
-            if msg.content.startswith("**url**:"):
-                continue
-            history.append(msg)
-
-        # Reverse the messages to maintain the order of conversation
-        chat_history = [{"name": "AI" if msg.author == client.user \
-                            else "Human", "content": msg.content} \
-                            for msg in reversed(history[1:])]
-
-        #print(f"Chat history: {chat_history}")
 
         if len(clean_content) > 10:
             # Forward the message content to your Flask app
