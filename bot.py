@@ -3,6 +3,7 @@ import discord
 import aiohttp
 import json
 from dotenv import load_dotenv
+import shlex
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN', None)  # Get your bot token from the .env file
@@ -82,9 +83,18 @@ async def on_message(message):
             return  # exit the event handler
 
         if VECTORNAME == None:
-            # maybe only let it answer to my user DMs
+            # debug mode for me
             print(f'DM from {message.author}')
-            return
+            if message.author == "MarkeD#2972":
+                debug=True
+                await chunk_send(message.channel, "Hello Master. Use !vectorname <vector_name> 'clean content' to debug")
+                words = shlex.split(message)
+                if words[0] == "!vectorname":
+                    VECTORNAME = words[1]
+                    await chunk_send(message.channel, f"vectorname={VECTORNAME}")
+                    clean_content = words[2]
+                else:
+                    await chunk_send(message.channel, "No changes made")
 
         # Send a thinking message
         thinking_message = await new_thread.send("Thinking...")
