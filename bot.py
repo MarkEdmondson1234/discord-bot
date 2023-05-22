@@ -154,7 +154,7 @@ async def on_message(message):
                             await new_thread.send(f"*Reply to {bot_mention} within this thread to continue. Use `!savethread` to save thread to database, or `!saveurl` to save content at a URL*")
                         elif isinstance(new_thread, discord.DMChannel):
                             # Its a DM
-                            await new_thread.send(f"*Use !savethread to save private chat history to database, or `!saveurl` to save content at a URL**")
+                            await new_thread.send(f"*Use `!savethread` to save private chat history to database, or `!saveurl` to save content at a URL**")
                         else:
                             print(f"I couldn't work out the channel type: {new_thread}")
                     else:
