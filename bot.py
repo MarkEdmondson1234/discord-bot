@@ -64,7 +64,7 @@ async def make_chat_history(new_thread, bot_mention, client_user):
 
     return chat_history
 
-async def make_new_thread(message):
+async def make_new_thread(message, clean_content):
     # Check if the message was sent in a thread or a private message
     if isinstance(message.channel, (discord.Thread, discord.DMChannel)):
         new_thread = message.channel
@@ -89,9 +89,11 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-    new_thread = await make_new_thread(message)
+    clean_content = message.content.replace(bot_mention, '')
 
-    clean_content = message.content
+    new_thread = await make_new_thread(message, clean_content)
+
+    
     bot_mention = client.user.mention
 
     chat_history = await make_chat_history(new_thread, bot_mention, client.user)
