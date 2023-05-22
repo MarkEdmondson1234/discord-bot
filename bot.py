@@ -85,7 +85,9 @@ async def on_message(message):
         if VECTORNAME == None:
             # debug mode for me
             print(f'DM from {message.author}')
+
             if message.author == "MarkeD#2972":
+                VECTORNAME="edmonbrain"
                 debug=True
                 words = shlex.split(message)
                 if words[0] == "!vectorname":
@@ -94,6 +96,8 @@ async def on_message(message):
                     clean_content = words[2]
                 else:
                     await chunk_send(message.channel, "Hello Master. Use !vectorname <vector_name> 'clean content' to debug")
+            else:
+                return
 
         # Send a thinking message
         thinking_message = await new_thread.send("Thinking...")
