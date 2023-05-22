@@ -85,8 +85,7 @@ async def on_message(message):
         if VECTORNAME == None:
             # debug mode for me
             print(f'DM from {message.author}')
-
-            if message.author == "MarkeD#2972":
+            if str(message.author) == "MarkeD#2972":
                 VECTORNAME="edmonbrain"
                 debug=True
                 words = shlex.split(message)
