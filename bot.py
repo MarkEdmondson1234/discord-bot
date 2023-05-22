@@ -89,12 +89,10 @@ async def on_message(message):
     if message.author == client.user:
         return
 
+    bot_mention = client.user.mention
     clean_content = message.content.replace(bot_mention, '')
 
     new_thread = await make_new_thread(message, clean_content)
-
-    
-    bot_mention = client.user.mention
 
     chat_history = await make_chat_history(new_thread, bot_mention, client.user)
 
