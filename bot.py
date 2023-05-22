@@ -83,6 +83,7 @@ async def on_message(message):
             return  # exit the event handler
 
         if VECTORNAME == None:
+            new_thread = message.channel
             # debug mode for me
             print(f'DM from {message.author}')
             if str(message.author) == "MarkeD#2972":
