@@ -44,7 +44,7 @@ async def chunk_send(channel, message):
     for chunk in chunks:
         await channel.send(chunk)
 
-async def make_chat_history(new_thread):
+async def make_chat_history(new_thread, bot_mention, client_user):
     history = []
     async for msg in new_thread.history(limit=30):
         if msg.content.startswith(f"*Reply to {bot_mention}"):
@@ -92,8 +92,9 @@ async def on_message(message):
     new_thread = await make_new_thread(message)
 
     clean_content = message.content
+    bot_mention = client.user.mention
 
-    chat_history = await make_chat_history(new_thread)
+    chat_history = await make_chat_history(new_thread, bot_mention, client.user)
 
     if message.content:
         print(f'Got the message: {message.content}')
@@ -102,7 +103,6 @@ async def on_message(message):
         if message.content.startswith("!debug"):
             debug = True
 
-        bot_mention = client.user.mention
         clean_content = message.content.replace(bot_mention, '')
 
         try:
