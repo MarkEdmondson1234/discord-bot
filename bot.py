@@ -53,6 +53,19 @@ async def on_message(message):
     if message.author == client.user:
         return
 
+    # Check if the message was sent in a thread or a private message
+    if isinstance(message.channel, (discord.Thread, discord.DMChannel)):
+        new_thread = message.channel
+    else:
+        if len(clean_content) < 5:
+            thread_name = "Baaa--zzz"
+        else:
+            thread_name = f"Baa-zzz - {clean_content[:40]}"
+        # If it's not a thread, create a new one
+        new_thread = await message.channel.create_thread(
+            name=thread_name, 
+            message=message)
+
     if message.content:
         print(f'Got the message: {message.content}')
 
@@ -63,19 +76,6 @@ async def on_message(message):
         bot_mention = client.user.mention
         clean_content = message.content.replace(bot_mention, '')
 
-        # Check if the message was sent in a thread or a private message
-        if isinstance(message.channel, (discord.Thread, discord.DMChannel)):
-            new_thread = message.channel
-        else:
-            if len(clean_content) < 5:
-                thread_name = "Baaa--zzz"
-            else:
-                thread_name = f"Baa-zzz - {clean_content[:40]}"
-            # If it's not a thread, create a new one
-            new_thread = await message.channel.create_thread(
-                name=thread_name, 
-                message=message)
-
         try:
             VECTORNAME = select_vectorname(message)
         except ValueError as e:
@@ -83,7 +83,6 @@ async def on_message(message):
             return  # exit the event handler
 
         if VECTORNAME == None:
-            new_thread = message.channel
             # debug mode for me
             print(f'DM from {message.author}')
             if str(message.author) == "MarkeD#2972":
