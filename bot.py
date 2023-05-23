@@ -193,7 +193,7 @@ async def on_message(message):
                         await thinking_message.edit(content="Error in processing message.")
         else:
             print(f"Got a little message not worth sending: {clean_content}")
-            await thinking_message.edit(content="Your reply is too small to think too long about:", clean_content)
+            await thinking_message.edit(content=f"Your reply is too small to think too long about: {clean_content}")
 
     if message.attachments:
 
