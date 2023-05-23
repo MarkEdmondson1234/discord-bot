@@ -90,7 +90,8 @@ async def on_message(message):
         return
 
     # If the bot isn't mentioned and it's not a DM, return
-    if not isinstance(message.channel, discord.DMChannel) and client.user not in message.mentions:
+    if not isinstance(message.channel, discord.DMChannel)  \
+       and client.user not in message.mentions:
         return
 
     bot_mention = client.user.mention
