@@ -89,7 +89,12 @@ async def on_message(message):
     if message.author == client.user:
         return
 
+    # If the bot isn't mentioned and it's not a DM, return
+    if not isinstance(message.channel, discord.DMChannel) and client.user not in message.mentions:
+        return
+
     bot_mention = client.user.mention
+
     clean_content = message.content.replace(bot_mention, '')
 
     new_thread = await make_new_thread(message, clean_content)
@@ -187,7 +192,7 @@ async def on_message(message):
                         await thinking_message.edit(content="Error in processing message.")
         else:
             print(f"Got a little message not worth sending: {clean_content}")
-            await thinking_message.edit(content="Your reply is too small to think too long about")
+            await thinking_message.edit(content="Your reply is too small to think too long about:", clean_content)
 
     if message.attachments:
 
