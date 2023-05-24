@@ -168,9 +168,9 @@ async def on_message(message):
 
                         for source in unique_source_docs:
                             metadata_source = source.get('metadata')
-                            if debug:
-                                source_message = f"**source**: {metadata_source.get('source')}"
-                                await chunk_send(new_thread, source_message)
+                            #if debug:
+                            source_message = f"**source**: {metadata_source.get('source')}"
+                            await chunk_send(new_thread, source_message)
                             source_url = metadata_source.get('url', None)
                             if source_url is not None:
                                 url_message = f"**url**: {source_url}"
@@ -197,10 +197,10 @@ async def on_message(message):
 
     if message.attachments:
 
-        max_file_size = 1 * 1024 * 1024  # 1 MB
+        max_file_size = 10 * 1024 * 1024  # 10 MB
         for attachment in message.attachments:
             if attachment.size > max_file_size:
-                await thinking_message.edit("Sorry, a file is too large to upload via Discord, please use another method.  Uploaded files need to be smaller than 1MB each.")
+                await thinking_message.edit("Sorry, a file is too large to upload via Discord, please use another method such as the bucket.  Uploaded files need to be smaller than 10MB each.")
                 return
 
         # Send a thinking message
