@@ -106,6 +106,42 @@ async def on_message(message):
 
     chat_history = await make_chat_history(new_thread, bot_mention, client.user)
 
+    if message.attachments:
+
+        max_file_size = 10 * 1024 * 1024  # 10 MB
+        for attachment in message.attachments:
+            if attachment.size > max_file_size:
+                await thinking_message.edit("Sorry, a file is too large to upload via Discord, please use another method such as the bucket.  Uploaded files need to be smaller than 10MB each.")
+                return
+
+        # Send a thinking message
+        thinking_message2 = await new_thread.send("Uploading file(s)..")
+
+        # Forward the attachments to Flask app
+        flask_app_url = f'{FLASKURL}/discord/edmonbrain/files'
+        print(f'Calling {flask_app_url}')
+        payload = {
+            'attachments': [{'url': attachment.url, 'filename': attachment.filename} for attachment in message.attachments],
+            'content': clean_content,
+            'chat_history': chat_history
+        }
+        async with aiohttp.ClientSession() as session:
+            async with session.post(flask_app_url, json=payload) as response:
+                print(f'file response.status: {response.status}')
+                if response.status == 200:
+                    response_data = await response.json()
+                    print(f'response_data: {response_data}')
+                    summaries = response_data.get('summaries', [])
+                    for summary in summaries:
+                        await chunk_send(new_thread, summary)
+                    await thinking_message2.edit(content="Uploaded file(s)")
+                else:
+                    # Edit the thinking message to show an error
+                    await thinking_message2.edit(content="Error in processing file(s).")
+
+        # we don't send to message endpoint as well
+        return 
+
     if message.content:
         print(f'Got the message: {message.content}')
 
@@ -198,38 +234,5 @@ async def on_message(message):
         else:
             print(f"Got a little message not worth sending: {clean_content}")
             await thinking_message.edit(content=f"Your reply is too small to think too long about: {clean_content}")
-
-    if message.attachments:
-
-        max_file_size = 10 * 1024 * 1024  # 10 MB
-        for attachment in message.attachments:
-            if attachment.size > max_file_size:
-                await thinking_message.edit("Sorry, a file is too large to upload via Discord, please use another method such as the bucket.  Uploaded files need to be smaller than 10MB each.")
-                return
-
-        # Send a thinking message
-        thinking_message2 = await new_thread.send("Uploading file(s)..")
-
-        # Forward the attachments to Flask app
-        flask_app_url = f'{FLASKURL}/discord/edmonbrain/files'
-        print(f'Calling {flask_app_url}')
-        payload = {
-            'attachments': [{'url': attachment.url, 'filename': attachment.filename} for attachment in message.attachments],
-            'content': clean_content,
-            'chat_history': chat_history
-        }
-        async with aiohttp.ClientSession() as session:
-            async with session.post(flask_app_url, json=payload) as response:
-                print(f'file response.status: {response.status}')
-                if response.status == 200:
-                    response_data = await response.json()
-                    print(f'response_data: {response_data}')
-                    summaries = response_data.get('summaries', [])
-                    for summary in summaries:
-                        await chunk_send(new_thread, summary)
-                    await thinking_message2.edit(content="Uploaded file(s)")
-                else:
-                    # Edit the thinking message to show an error
-                    await thinking_message2.edit(content="Error in processing file(s).")
 
 client.run(TOKEN)
