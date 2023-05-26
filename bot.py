@@ -55,6 +55,8 @@ async def make_chat_history(new_thread, bot_mention, client_user):
             continue
         if msg.content.startswith("**url**:"):
             continue
+        if msg.content.startswith("Deleting source:")
+            continue
         history.append(msg)
 
     # Reverse the messages to maintain the order of conversation
@@ -140,7 +142,7 @@ async def on_message(message):
                     summaries = response_data.get('summaries', [])
                     for summary in summaries:
                         await chunk_send(new_thread, summary)
-                    await thinking_message2.edit(content="Uploaded file(s)")
+                    await thinking_message2.edit(content="Uploaded file(s). Use !deletesource {source_name} to remove it again")
                 else:
                     # Edit the thinking message to show an error
                     await thinking_message2.edit(content="Error in processing file(s).")
