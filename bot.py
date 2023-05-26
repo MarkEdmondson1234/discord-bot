@@ -118,7 +118,7 @@ async def on_message(message):
         thinking_message2 = await new_thread.send("Uploading file(s)..")
 
         # Forward the attachments to Flask app
-        flask_app_url = f'{FLASKURL}/discord/edmonbrain/files'
+        flask_app_url = f'{FLASKURL}/discord/{VECTORNAME}/files'
         print(f'Calling {flask_app_url}')
         payload = {
             'attachments': [{'url': attachment.url, 'filename': attachment.filename} for attachment in message.attachments],
