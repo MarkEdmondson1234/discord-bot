@@ -106,6 +106,12 @@ async def on_message(message):
 
     chat_history = await make_chat_history(new_thread, bot_mention, client.user)
 
+    try:
+        VECTORNAME = select_vectorname(message)
+    except ValueError as e:
+        print(e)
+        return  # exit the event handler
+
     if message.attachments:
 
         max_file_size = 10 * 1024 * 1024  # 10 MB
@@ -150,12 +156,6 @@ async def on_message(message):
             debug = True
 
         clean_content = message.content.replace(bot_mention, '')
-
-        try:
-            VECTORNAME = select_vectorname(message)
-        except ValueError as e:
-            print(e)
-            return  # exit the event handler
 
         if VECTORNAME == None:
             # debug mode for me
