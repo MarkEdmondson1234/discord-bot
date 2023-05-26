@@ -55,7 +55,7 @@ async def make_chat_history(new_thread, bot_mention, client_user):
             continue
         if msg.content.startswith("**url**:"):
             continue
-        if msg.content.startswith("Deleting source:")
+        if msg.content.startswith("Deleting source:"):
             continue
         history.append(msg)
 
