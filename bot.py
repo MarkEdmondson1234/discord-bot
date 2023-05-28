@@ -116,10 +116,10 @@ async def on_message(message):
 
     if message.attachments:
 
-        max_file_size = 10 * 1024 * 1024  # 10 MB
+        max_file_size = 1 * 1024 * 1024  # 10 MB
         for attachment in message.attachments:
             if attachment.size > max_file_size:
-                await thinking_message.edit("Sorry, a file is too large to upload via Discord, please use another method such as the bucket.  Uploaded files need to be smaller than 10MB each.")
+                await thinking_message.edit("Sorry, a file is too large to upload via Discord, please use another method such as the bucket, or turn it into a .txt file. Uploaded files need to be smaller than 1MB each.")
                 return
 
         # Send a thinking message
