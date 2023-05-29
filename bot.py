@@ -49,7 +49,7 @@ async def make_chat_history(new_thread, bot_mention, client_user):
     async for msg in new_thread.history(limit=30):
         if msg.content.startswith(f"*Reply to {bot_mention}"):
             continue
-        if msg.content.startswith("*Use !savethread"):
+        if msg.content.startswith("*Use !help"):
             continue
         if msg.content.startswith("**source**:"):
             continue
@@ -224,10 +224,10 @@ async def on_message(message):
 
                         # Check if the message was sent in a thread or a private message
                         if isinstance(new_thread, discord.Thread):
-                            await new_thread.send(f"*Reply to {bot_mention} within this thread to continue. Use `!savethread` to save thread to database, or `!saveurl` to save content at a URL*")
+                            await new_thread.send(f"*Reply to {bot_mention} within this thread to continue. Use `!help` for special commands*")
                         elif isinstance(new_thread, discord.DMChannel):
                             # Its a DM
-                            await new_thread.send(f"*Use `!savethread` to save private chat history to database, or `!saveurl` to save content at a URL*")
+                            await new_thread.send(f"*Use `!help` to see special commands*")
                         else:
                             print(f"I couldn't work out the channel type: {new_thread}")
                     else:
