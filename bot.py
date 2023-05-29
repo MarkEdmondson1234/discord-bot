@@ -179,7 +179,7 @@ async def on_message(message):
         # Send a thinking message
         thinking_message = await new_thread.send("Thinking...")
 
-        if len(clean_content) > 10:
+        if len(clean_content) > 10 or clean_content=="!help":
             # Forward the message content to your Flask app
             flask_app_url = f'{FLASKURL}/discord/{VECTORNAME}/message'
             print(f'Calling {flask_app_url}')
