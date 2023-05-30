@@ -157,7 +157,7 @@ async def on_message(message):
         if message.content.startswith("!debug"):
             debug = True
 
-        clean_content = message.content.replace(bot_mention, '')
+        clean_content = message.content.replace(bot_mention, '').strip()
 
         if VECTORNAME == None:
             # debug mode for me
@@ -179,7 +179,7 @@ async def on_message(message):
         # Send a thinking message
         thinking_message = await new_thread.send("Thinking...")
 
-        if len(clean_content) > 10 or "!help" in clean_content:
+        if len(clean_content) > 10 or clean_content.startswith("!"):
             # Forward the message content to your Flask app
             flask_app_url = f'{FLASKURL}/discord/{VECTORNAME}/message'
             print(f'Calling {flask_app_url}')
