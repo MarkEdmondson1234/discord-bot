@@ -63,9 +63,9 @@ async def make_chat_history(new_thread, bot_mention, client_user):
     chat_history = []
     for msg in reversed(history[1:]):
         author = "AI" if msg.author == client_user else "Human"
-        content = msg.content
+        clean_content = message.content.replace(bot_mention, '').strip()
         embeds = [embed.to_dict() for embed in msg.embeds]
-        chat_history.append({"name": author, "content": content, "embeds": embeds})
+        chat_history.append({"name": author, "content": clean_content, "embeds": embeds})
 
 
     return chat_history
